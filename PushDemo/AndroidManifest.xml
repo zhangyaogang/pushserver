@@ -116,6 +116,8 @@
             android:name="com.baidu.android.pushservice.CommandService"
             android:exported="true" />
         <!-- push结束 -->
+        
+        <service android:enabled="true" android:name=".Music" /> 
 
 
         <!-- 在百度开发者中心查询应用的API Key -->

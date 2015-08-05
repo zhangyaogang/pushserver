@@ -29,6 +29,7 @@ public final class R {
         public static final int simple_notification_icon=0x7f020006;
     }
     public static final class id {
+        public static final int all=0x7f060024;
         public static final int bpush_download_icon=0x7f060000;
         public static final int bpush_download_progress=0x7f060004;
         public static final int bpush_lapp_notification_big_icon_imageview=0x7f060005;
@@ -47,26 +48,23 @@ public final class R {
         public static final int bpush_type_listview=0x7f06000b;
         public static final int btn_cancel=0x7f060016;
         public static final int btn_clear_log=0x7f06001a;
-        public static final int btn_delTags=0x7f060025;
         public static final int btn_guide=0x7f060015;
-        public static final int btn_init=0x7f06001f;
-        public static final int btn_initAK=0x7f06001e;
-        public static final int btn_rich=0x7f060022;
         public static final int btn_set=0x7f060014;
-        public static final int btn_setTags=0x7f060024;
-        public static final int btn_setunDisturb=0x7f060028;
-        public static final int btn_showTags=0x7f060027;
-        public static final int btn_unbindTags=0x7f060021;
         public static final int end_text=0x7f060012;
         public static final int end_time_picker=0x7f060013;
         public static final int firstBtnLine=0x7f06001d;
         public static final int fourBtnLine=0x7f060026;
         public static final int logtip_fra=0x7f060018;
+        public static final int next=0x7f060021;
         public static final int notification_icon=0x7f060029;
         public static final int notification_text=0x7f06002b;
         public static final int notification_time=0x7f06002c;
         public static final int notification_title=0x7f06002a;
+        public static final int pause=0x7f06001f;
+        public static final int play=0x7f06001e;
+        public static final int pre=0x7f060022;
         public static final int secendBtnLine=0x7f060020;
+        public static final int single=0x7f060025;
         public static final int start_text=0x7f060010;
         public static final int start_time_picker=0x7f060011;
         public static final int stroll_text=0x7f06001b;
@@ -74,6 +72,8 @@ public final class R {
         public static final int text_log=0x7f06001c;
         public static final int text_log_tip=0x7f060019;
         public static final int thirdBtnLine=0x7f060023;
+        public static final int volumeIncrease=0x7f060028;
+        public static final int volumeReduce=0x7f060027;
     }
     public static final class layout {
         public static final int bpush_download_progress=0x7f030000;

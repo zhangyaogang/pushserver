@@ -62,19 +62,19 @@
             android:orientation="horizontal" >
 
             <Button
-                android:id="@+id/btn_initAK"
+                android:id="@+id/play"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dip"
                 android:layout_weight="1.0"
-                android:text="@string/text_btn_initAK" />
+                android:text="播放" />
 
             <Button
-                android:id="@+id/btn_init"
+                android:id="@+id/pause"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
-                android:text="@string/text_btn_init" />
+                android:text="暂停" />
         </LinearLayout>
 
         <LinearLayout
@@ -84,19 +84,19 @@
             android:orientation="horizontal" >
 
             <Button
-                android:id="@+id/btn_unbindTags"
+                android:id="@+id/next"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dip"
                 android:layout_weight="1.0"
-                android:text="@string/text_btn_unbind" />
+                android:text="下一首" />
 
             <Button
-                android:id="@+id/btn_rich"
+                android:id="@+id/pre"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
-                android:text="@string/text_btn_rich" />
+                android:text="上一首" />
         </LinearLayout>
 
         <LinearLayout
@@ -106,19 +106,19 @@
             android:orientation="horizontal" >
 
             <Button
-                android:id="@+id/btn_setTags"
+                android:id="@+id/all"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dip"
                 android:layout_weight="1.0"
-                android:text="@string/text_btn_setTags" />
+                android:text="所有循环" />
 
             <Button
-                android:id="@+id/btn_delTags"
+                android:id="@+id/single"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
-                android:text="@string/text_btn_delTags" />
+                android:text="单曲循环" />
         </LinearLayout>
 
         <LinearLayout
@@ -128,19 +128,19 @@
             android:orientation="horizontal" >
 
             <Button
-                android:id="@+id/btn_showTags"
+                android:id="@+id/volumeReduce"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="10dip"
                 android:layout_weight="1.0"
-                android:text="@string/text_btn_showTags" />
+                android:text="-" />
 
             <Button
-                android:id="@+id/btn_setunDisturb"
+                android:id="@+id/volumeIncrease"
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
-                android:text="@string/text_btn_setunDisturb" />
+                android:text="+" />
         </LinearLayout>
     </LinearLayout>
 

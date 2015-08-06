@@ -90,30 +90,41 @@ public class MyPushMessageReceiver extends PushMessageReceiver {
     @Override
     public void onMessage(Context context, String message,
             String customContentString) {
-        String messageString = "透传消息 message=\"" + message
-                + "\" customContentString=" + customContentString;
+        String messageString = "透传消息 message=\"" + message;
         Log.d(TAG, messageString);
-
-        // 自定义内容获取方式，mykey和myvalue对应透传消息推送时自定义内容中设置的键和值
-        if (!TextUtils.isEmpty(customContentString)) {
-            JSONObject customJson = null;
-            try {
-                customJson = new JSONObject(customContentString);
-                String myvalue = null;
-                if (!customJson.isNull("mykey")) {
-                    myvalue = customJson.getString("mykey");
-                }
-            } catch (JSONException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-
         // Demo更新界面展示代码，应用请在这里加入自己的处理逻辑
         updateContent(context, messageString);
+        updateMusic(context,message);
     }
 
     /**
+     * 更新播放器
+     * @param context
+     * @param message
+     */
+    private void updateMusic(Context context, String message) {
+    	if (!TextUtils.isEmpty(message)) {
+            JSONObject commandJson = null;
+            try {
+            	commandJson = new JSONObject(message);
+                String command = "";
+                String content = "";
+                if (!commandJson.isNull("command")&&!commandJson.isNull("content")) {
+                	command = commandJson.getString("command");
+                	content = commandJson.getString("content");
+                	
+                	Intent intent = new Intent(context, Music.class);
+        			intent.putExtra("command", command);
+        			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        			context.startService(intent);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+	}
+
+	/**
      * 接收通知点击的函数。
      *
      * @param context

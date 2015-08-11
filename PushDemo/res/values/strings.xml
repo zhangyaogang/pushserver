@@ -23,7 +23,7 @@
     <string name="text_btn_off_app_msg">加入黑名单</string>
     <string name="text_btn_unread_only_msg">只获取未读消息</string>
     <string name="text_btn_on_shortcut">生成快捷图标</string>
-    <string name="app_name">PushDemo</string>
+    <string name="app_name">SmartDevice</string>
     <string name="text_btn_showTags">列举标签</string>
     <string name="text_btn_unbind">解绑</string>
     <string name="text_btn_setunDisturb">免打扰时段</string>

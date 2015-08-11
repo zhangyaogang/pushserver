@@ -1,4 +1,4 @@
-package com.baidu.push.example;
+package com.smart.purifier;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -124,6 +124,7 @@ public class PushDemoActivity extends Activity implements View.OnClickListener {
 			startService(intent);
 		} else if(v.getId() == R.id.btn_clear_log) {
 			Utils.setLogText(getApplicationContext(), "");
+			Utils.logStringCache = "";
 			updateDisplay();
 		}
 	}

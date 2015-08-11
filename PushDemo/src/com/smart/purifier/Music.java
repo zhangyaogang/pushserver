@@ -1,4 +1,4 @@
-package com.baidu.push.example;
+package com.smart.purifier;
 
 import java.io.File;
 import java.io.FilenameFilter;

@@ -2,46 +2,25 @@ package com.baidu.push.example;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.List;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.Notification;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore.Audio;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.Window;
-import android.webkit.CookieManager;
-import android.webkit.CookieSyncManager;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.ab.http.AbFileHttpResponseListener;
 import com.ab.http.AbHttpUtil;
-import com.baidu.android.pushservice.CustomPushNotificationBuilder;
 import com.baidu.android.pushservice.PushConstants;
 import com.baidu.android.pushservice.PushManager;
+import com.smart.purifier.R;
 
 /*
  * 云推送Demo主Activity。
@@ -59,6 +38,7 @@ public class PushDemoActivity extends Activity implements View.OnClickListener {
 	Button single = null;
 	Button volumeIncrease = null;
 	Button volumeReduce = null;
+	Button btn_clear_log = null;
 	TextView logText = null;
 	ScrollView scrollView = null;
 	private boolean isLogin = false;
@@ -85,6 +65,7 @@ public class PushDemoActivity extends Activity implements View.OnClickListener {
 		single = (Button) findViewById(R.id.single);
 		volumeIncrease = (Button) findViewById(R.id.volumeIncrease);
 		volumeReduce = (Button) findViewById(R.id.volumeReduce);
+		btn_clear_log = (Button) findViewById(R.id.btn_clear_log);
 
 		logText = (TextView) findViewById(R.id.text_log);
 		scrollView = (ScrollView) findViewById(R.id.stroll_text);
@@ -97,6 +78,7 @@ public class PushDemoActivity extends Activity implements View.OnClickListener {
 		single.setOnClickListener(this);
 		volumeIncrease.setOnClickListener(this);
 		volumeReduce.setOnClickListener(this);
+		btn_clear_log.setOnClickListener(this);
 
 		// Push: 以apikey的方式登录，一般放在主Activity的onCreate中。
 		// 这里把apikey存放于manifest文件中，只是一种存放方式，
@@ -140,8 +122,9 @@ public class PushDemoActivity extends Activity implements View.OnClickListener {
 			Intent intent = new Intent(this, Music.class);
 			intent.putExtra("command", "volumeReduce");
 			startService(intent);
-		} else {
-
+		} else if(v.getId() == R.id.btn_clear_log) {
+			Utils.setLogText(getApplicationContext(), "");
+			updateDisplay();
 		}
 	}
 

@@ -26,7 +26,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
         <activity
-            android:name="com.smart.purifier.PushDemoActivity"
+            android:name="com.smart.purifier.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" >
@@ -107,7 +107,7 @@
             android:exported="true" />
         <!-- push结束 -->
         
-        <service android:enabled="true" android:name=".Music" /> 
+        <service android:enabled="true" android:name=".MusicService" /> 
 
 
         <!-- 在百度开发者中心查询应用的API Key -->

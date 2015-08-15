@@ -1,12 +1,10 @@
 package com.smart.purifier;
 
 import java.io.File;
-import java.io.FileInputStream;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -15,20 +13,20 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ab.http.AbFileHttpResponseListener;
 import com.ab.http.AbHttpUtil;
 import com.baidu.android.pushservice.PushConstants;
 import com.baidu.android.pushservice.PushManager;
-import com.smart.purifier.R;
 
 /*
  * 云推送Demo主Activity。
  * 代码中，注释以Push标注开头的，表示接下来的代码块是Push接口调用示例
  */
-public class PushDemoActivity extends Activity implements View.OnClickListener {
+public class MainActivity extends Activity implements View.OnClickListener {
 
-	private static final String TAG = PushDemoActivity.class.getSimpleName();
+	private static final String TAG = MainActivity.class.getSimpleName();
 	RelativeLayout mainLayout = null;
 	Button play = null;
 	Button pause = null;
@@ -86,7 +84,7 @@ public class PushDemoActivity extends Activity implements View.OnClickListener {
 		// "api_key")
 		PushManager.startWork(getApplicationContext(),
 				PushConstants.LOGIN_TYPE_API_KEY,
-				Utils.getMetaValue(PushDemoActivity.this, "api_key"));
+				Utils.getMetaValue(MainActivity.this, "api_key"));
 		// Push: 如果想基于地理位置推送，可以打开支持地理位置的推送的开关
 		// PushManager.enableLbs(getApplicationContext());
 	}
@@ -94,35 +92,35 @@ public class PushDemoActivity extends Activity implements View.OnClickListener {
 	@Override
 	public void onClick(View v) {
 		if (v.getId() == R.id.play) {
-			Intent intent = new Intent(this, Music.class);
+			Intent intent = new Intent(this, MusicService.class);
 			intent.putExtra("command", "play");
 			startService(intent);
 		} else if (v.getId() == R.id.pause) {
-			Intent intent = new Intent(this, Music.class);
+			Intent intent = new Intent(this, MusicService.class);
 			intent.putExtra("command", "pause");
 			startService(intent);
 		} else if (v.getId() == R.id.next) {
-			Intent intent = new Intent(this, Music.class);
+			Intent intent = new Intent(this, MusicService.class);
 			intent.putExtra("command", "next");
 			startService(intent);
 		} else if (v.getId() == R.id.pre) {
-			Intent intent = new Intent(this, Music.class);
+			Intent intent = new Intent(this, MusicService.class);
 			intent.putExtra("command", "pre");
 			startService(intent);
 		} else if (v.getId() == R.id.all) {
 			// deleteTags();
 		} else if (v.getId() == R.id.volumeIncrease) {
-			Intent intent = new Intent(this, Music.class);
+			Intent intent = new Intent(this, MusicService.class);
 			intent.putExtra("command", "volumeIncrease");
 			startService(intent);
-//			Utils.logStringCache = "";
-//			Utils.setLogText(getApplicationContext(), Utils.logStringCache);
-//			updateDisplay();
+			// Utils.logStringCache = "";
+			// Utils.setLogText(getApplicationContext(), Utils.logStringCache);
+			// updateDisplay();
 		} else if (v.getId() == R.id.volumeReduce) {
-			Intent intent = new Intent(this, Music.class);
+			Intent intent = new Intent(this, MusicService.class);
 			intent.putExtra("command", "volumeReduce");
 			startService(intent);
-		} else if(v.getId() == R.id.btn_clear_log) {
+		} else if (v.getId() == R.id.btn_clear_log) {
 			Utils.setLogText(getApplicationContext(), "");
 			Utils.logStringCache = "";
 			updateDisplay();
@@ -139,6 +137,21 @@ public class PushDemoActivity extends Activity implements View.OnClickListener {
 		super.onResume();
 		Log.d(TAG, "onResume");
 		updateDisplay();
+		checkCommand();
+	}
+
+	private void checkCommand() {
+		if (Utils.commandCache.length() > 0) {
+			String command = Utils.commandCache;
+			if (command.equals("download")) {
+				String downUrl = Utils.contentCache;
+				String musicId = Utils.musicIdCache;
+				downloadFile(downUrl, musicId);
+			} else {
+
+			}
+			Utils.clearHistory();
+		}
 	}
 
 	@Override
@@ -184,30 +197,28 @@ public class PushDemoActivity extends Activity implements View.OnClickListener {
 		}
 	}
 
-	private void downloadFile() {
-		String url = "http://192.168.1.100:9000/public/music/兄弟抱一下.mp3";
+	/**
+	 * 下载并重命名为id.mp3
+	 * 
+	 * @param url
+	 * @param id
+	 */
+	private void downloadFile(String url, final String id) {
+		// String url = "http://192.168.1.100:9000/public/music/兄弟抱一下.mp3";
 		mAbHttpUtil.get(url, new AbFileHttpResponseListener(url) {
 
 			// 获取数据成功会调用这里
 			@Override
 			public void onSuccess(int statusCode, File file) {
 				File sdcardDir = Environment.getExternalStorageDirectory();
-				String path = sdcardDir.getPath() + "/myVideos/"
-						+ file.getName();
+				String path = sdcardDir.getPath() + "/myVideos/" + id + ".mp3";
 				createSDCardDir();
 				File outFile = new File(path);
 				boolean success = file.renameTo(outFile);
-				if (outFile.exists()) {
-					MediaPlayer mp = new MediaPlayer();
-					FileInputStream fis;
-					try {
-						fis = new FileInputStream(outFile);
-						mp.setDataSource(fis.getFD());
-						mp.prepare();
-						mp.start();
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+				if(success){
+					Toast.makeText(MainActivity.this, "下载成功", Toast.LENGTH_SHORT).show();
+				}else{
+					Toast.makeText(MainActivity.this, "本地已存在", Toast.LENGTH_SHORT).show();
 				}
 			}
 
@@ -217,6 +228,7 @@ public class PushDemoActivity extends Activity implements View.OnClickListener {
 				Log.d(TAG, "onStart");
 				// 开始下载
 				isDownload = true;
+				Toast.makeText(MainActivity.this, "开始下载", Toast.LENGTH_SHORT).show();
 			}
 
 			// 失败，调用
@@ -225,6 +237,7 @@ public class PushDemoActivity extends Activity implements View.OnClickListener {
 					Throwable error) {
 				Log.d(TAG, "onFailure");
 				isDownload = false;
+				Toast.makeText(MainActivity.this, "下载失败", Toast.LENGTH_SHORT).show();
 			}
 
 			// 下载进度

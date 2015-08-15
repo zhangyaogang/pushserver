@@ -14,7 +14,7 @@ import android.os.Environment;
 import android.os.IBinder;
 import android.widget.Toast;
 
-public class Music extends Service {
+public class MusicService extends Service {
 	private MediaPlayer player;
 	private AudioManager audioManager = null; // 音频
 	private String path;
@@ -45,6 +45,25 @@ public class Music extends Service {
 			for (File file : MUSIC_PATH.listFiles(new MusicFilter())) {
 				musicList.add(file.getAbsolutePath());
 			}
+		}
+		if (musicList.size() <= 0) {
+			Toast.makeText(MusicService.this, "无音乐", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		try {
+			player.reset(); // 重置多媒体
+			String dataSource = musicList.get(songNum);// 得到当前播放音乐的路径
+			setPlayName(dataSource);// 截取歌名
+			player.setDataSource(dataSource);
+			player.prepare();// 准备播放
+			// 当当前多媒体对象播放完成时发生的事件
+			player.setOnCompletionListener(new OnCompletionListener() {
+				public void onCompletion(MediaPlayer arg0) {
+					next();// 如果当前歌曲播放完毕,自动播放下一首.
+				}
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -89,39 +108,31 @@ public class Music extends Service {
 	@Override
 	public void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
-		path = intent.getStringExtra("path");
-		command = intent.getStringExtra("command");
-
-		if (command.equals("play")) {
-			start();
-		} else if (command.equals("pause")) {
-			pause();
-		} else if (command.equals("next")) {
-			next();
-		} else if (command.equals("pre")) {
-			pre();
-		} else if (command.equals("volumeIncrease")) {
-			audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC,
-					AudioManager.ADJUST_RAISE, AudioManager.FLAG_SHOW_UI); // 调高声音
-		} else if (command.equals("volumeReduce")) {
-			// 第一个参数：声音类型
-			// 第二个参数：调整音量的方向
-			// 第三个参数：可选的标志位
-			audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC,
-					AudioManager.ADJUST_LOWER, AudioManager.FLAG_SHOW_UI);// 调低声音
+		try {
+			path = intent.getStringExtra("path");
+			command = intent.getStringExtra("command");
+	
+			if (command.equals("play")) {
+				start();
+			} else if (command.equals("pause")) {
+				pause();
+			} else if (command.equals("next")) {
+				next();
+			} else if (command.equals("pre")) {
+				pre();
+			} else if (command.equals("volumeIncrease")) {
+				audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC,
+						AudioManager.ADJUST_RAISE, AudioManager.FLAG_SHOW_UI); // 调高声音
+			} else if (command.equals("volumeReduce")) {
+				// 第一个参数：声音类型
+				// 第二个参数：调整音量的方向
+				// 第三个参数：可选的标志位
+				audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC,
+						AudioManager.ADJUST_LOWER, AudioManager.FLAG_SHOW_UI);// 调低声音
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
-		// File file = new File(path);
-		// if (file.exists()) {
-		// FileInputStream fis;
-		// try {
-		// fis = new FileInputStream(file);
-		// player.setDataSource(fis.getFD());
-		// player.prepare();
-		// player.start();
-		// } catch (Exception e) {
-		// e.printStackTrace();
-		// }
-		// }
 	}
 
 	@Override
@@ -142,7 +153,7 @@ public class Music extends Service {
 
 	private void start() {
 		if (musicList.size() <= 0) {
-			Toast.makeText(Music.this, "无音乐", Toast.LENGTH_SHORT).show();
+			Toast.makeText(MusicService.this, "无音乐", Toast.LENGTH_SHORT).show();
 			return;
 		}
 		try {

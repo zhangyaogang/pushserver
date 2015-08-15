@@ -25,7 +25,16 @@ public class Utils {
     public static final String EXTRA_MESSAGE = "message";
 
     public static String logStringCache = "";
+    public static String commandCache = "";
+    public static String contentCache = "";
+    public static String musicIdCache = "";
 
+    public static void clearHistory(){
+    	commandCache = "";
+    	contentCache = "";
+    	musicIdCache = "";
+    }
+    
     // 获取ApiKey
     public static String getMetaValue(Context context, String metaKey) {
         Bundle metaData = null;

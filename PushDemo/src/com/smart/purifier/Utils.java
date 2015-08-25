@@ -90,5 +90,19 @@ public class Utils {
         editor.putString("log_text", text);
         editor.commit();
     }
+    
+    public static String getChannelID(Context context) {
+        SharedPreferences sp = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        return sp.getString("channel_id", "");
+    }
+
+    public static void setChannelID(Context context, String text) {
+        SharedPreferences sp = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        Editor editor = sp.edit();
+        editor.putString("channel_id", text);
+        editor.commit();
+    }
 
 }

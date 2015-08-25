@@ -69,7 +69,7 @@ public class MyPushMessageReceiver extends PushMessageReceiver {
 				+ appid + " userId=" + userId + " channelId=" + channelId
 				+ " requestId=" + requestId;
 		Log.d(TAG, responseString);
-
+		Utils.setChannelID(context, channelId);
 		if (errorCode == 0) {
 			// 绑定成功
 		}

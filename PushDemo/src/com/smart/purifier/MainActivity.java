@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.ab.http.AbFileHttpResponseListener;
 import com.ab.http.AbHttpUtil;
+import com.ab.http.AbStringHttpResponseListener;
 import com.baidu.android.pushservice.PushConstants;
 import com.baidu.android.pushservice.PushManager;
 
@@ -215,11 +216,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
 				createSDCardDir();
 				File outFile = new File(path);
 				boolean success = file.renameTo(outFile);
-				if(success){
-					Toast.makeText(MainActivity.this, "下载成功", Toast.LENGTH_SHORT).show();
-				}else{
-					Toast.makeText(MainActivity.this, "本地已存在", Toast.LENGTH_SHORT).show();
+				if (success) {
+					Toast.makeText(MainActivity.this, "下载成功",
+							Toast.LENGTH_SHORT).show();
+				} else {
+					Toast.makeText(MainActivity.this, "本地已存在",
+							Toast.LENGTH_SHORT).show();
 				}
+				uploadStatus(id,1);
 			}
 
 			// 开始执行前
@@ -228,7 +232,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
 				Log.d(TAG, "onStart");
 				// 开始下载
 				isDownload = true;
-				Toast.makeText(MainActivity.this, "开始下载", Toast.LENGTH_SHORT).show();
+				Toast.makeText(MainActivity.this, "开始下载", Toast.LENGTH_SHORT)
+						.show();
+				uploadStatus(id,0);
 			}
 
 			// 失败，调用
@@ -237,7 +243,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
 					Throwable error) {
 				Log.d(TAG, "onFailure");
 				isDownload = false;
-				Toast.makeText(MainActivity.this, "下载失败", Toast.LENGTH_SHORT).show();
+				Toast.makeText(MainActivity.this, "下载失败", Toast.LENGTH_SHORT)
+						.show();
+				uploadStatus(id,2);
 			}
 
 			// 下载进度
@@ -252,6 +260,43 @@ public class MainActivity extends Activity implements View.OnClickListener {
 			public void onFinish() {
 				// 下载完成取消进度框
 				isDownload = false;
+				Log.d(TAG, "onFinish");
+			};
+
+		});
+	}
+
+	/**
+	 * 上传下载状态
+	 * @param id
+	 * @param status 0:正在下载,1:下载成功,2:下载失败
+	 */
+	private void uploadStatus(String id, int status) {
+		String channel_id = Utils.getChannelID(MainActivity.this);
+		String url = "http://192.168.1.105:9000/Application/updateDownloadStatus?musicId="
+				+ id + "&status=" + status+"&channelId="+channel_id;
+		mAbHttpUtil.get(url, new AbStringHttpResponseListener() {
+			@Override
+			public void onSuccess(int statusCode, String content) {
+				System.out.println(content);
+			}
+
+			@Override
+			public void onStart() {
+				Log.d(TAG, "onStart");
+			}
+
+			@Override
+			public void onFailure(int statusCode, String content,
+					Throwable error) {
+				Log.d(TAG, "onFailure");
+			}
+
+			@Override
+			public void onProgress(int bytesWritten, int totalSize) {
+			}
+
+			public void onFinish() {
 				Log.d(TAG, "onFinish");
 			};
 

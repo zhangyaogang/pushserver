@@ -17,12 +17,12 @@ import android.widget.Toast;
 public class MusicService extends Service {
 	private MediaPlayer player;
 	private AudioManager audioManager = null; // 音频
-	private String path;
 	private String command;
 	private static File MUSIC_PATH = null;// 找到music存放的路径。
 	public List<String> musicList;// 存放找到的所有mp3的绝对路径
 	public int songNum; // 当前播放的歌曲在List中的下标
 	public String songName; // 当前播放的歌曲名
+	public Long appointedMusicId = 0L;//指定音乐Id
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -104,12 +104,27 @@ public class MusicService extends Service {
 		int index = name.lastIndexOf(".");// 找到最后一个.
 		songName = name.substring(0, index);// 截取为mm
 	}
+	
+	/**
+	 * 播放指定musicId的音乐
+	 * @param appointedMusicId
+	 */
+	private void playAppointedMusic(Long musicId){
+		File sdcardDir = Environment.getExternalStorageDirectory();
+		String path = sdcardDir.getPath() + "/myVideos";
+		String filePah = path+"/"+musicId+".mp3";
+		for(int i=0;i<musicList.size();i++){
+			if(filePah.equals(musicList.get(i))){
+				songNum = i;
+			}
+		}
+		start();
+	}
 
 	@Override
 	public void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
 		try {
-			path = intent.getStringExtra("path");
 			command = intent.getStringExtra("command");
 	
 			if (command.equals("play")) {
@@ -124,11 +139,12 @@ public class MusicService extends Service {
 				audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC,
 						AudioManager.ADJUST_RAISE, AudioManager.FLAG_SHOW_UI); // 调高声音
 			} else if (command.equals("volumeReduce")) {
-				// 第一个参数：声音类型
-				// 第二个参数：调整音量的方向
-				// 第三个参数：可选的标志位
+				// 第一个参数：声音类型,第二个参数：调整音量的方向,第三个参数：可选的标志位
 				audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC,
 						AudioManager.ADJUST_LOWER, AudioManager.FLAG_SHOW_UI);// 调低声音
+			}else if(command.equals("playAppointed")){//播放指定音乐
+				appointedMusicId = intent.getLongExtra("musicId", 0L);
+				playAppointedMusic(appointedMusicId);
 			}
 		} catch (Exception e) {
 			// TODO: handle exception

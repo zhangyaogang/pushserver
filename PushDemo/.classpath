@@ -5,7 +5,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="lib" path="libs/andbase.jar"/>
-	<classpathentry kind="lib" path="libs/pushservice-4.5.1.8.jar"/>
+	<classpathentry kind="lib" path="libs/pushservice-4.5.1.8.jar" sourcepath="libs/pushservice-4.5.1.8.jar"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

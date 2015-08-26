@@ -122,6 +122,7 @@ public class MyPushMessageReceiver extends PushMessageReceiver {
 					} else {
 						Intent intent = new Intent(context, MusicService.class);
 						intent.putExtra("command", command);
+						intent.putExtra("musicId", musicId);
 						intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 						context.startService(intent);
 					}

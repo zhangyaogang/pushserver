@@ -104,5 +104,19 @@ public class Utils {
         editor.putString("channel_id", text);
         editor.commit();
     }
+    
+    public static String getDeviceID(Context context) {
+        SharedPreferences sp = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        return sp.getString("device_id", "");
+    }
+
+    public static void setDeviceID(Context context, String text) {
+        SharedPreferences sp = PreferenceManager
+                .getDefaultSharedPreferences(context);
+        Editor editor = sp.edit();
+        editor.putString("device_id", text);
+        editor.commit();
+    }
 
 }

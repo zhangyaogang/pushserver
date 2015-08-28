@@ -12,6 +12,8 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.ab.http.AbHttpUtil;
+import com.ab.http.AbStringHttpResponseListener;
 import com.baidu.android.pushservice.PushMessageReceiver;
 
 /*
@@ -42,6 +44,7 @@ public class MyPushMessageReceiver extends PushMessageReceiver {
 	/** TAG to Log */
 	public static final String TAG = MyPushMessageReceiver.class
 			.getSimpleName();
+	private AbHttpUtil mAbHttpUtil = null;
 
 	/**
 	 * 调用PushManager.startWork后，sdk将对push
@@ -70,11 +73,59 @@ public class MyPushMessageReceiver extends PushMessageReceiver {
 				+ " requestId=" + requestId;
 		Log.d(TAG, responseString);
 		Utils.setChannelID(context, channelId);
+		mAbHttpUtil = AbHttpUtil.getInstance(context);
+		mAbHttpUtil.setDebug(false);
 		if (errorCode == 0) {
 			// 绑定成功
+			// 获取Http工具类
+			GenerateDevice(context, channelId);
 		}
 		// Demo更新界面展示代码，应用请在这里加入自己的处理逻辑
 		updateContent(context, responseString);
+	}
+
+	/*
+	 * 生产设备id
+	 */
+	private void GenerateDevice(Context context,String channelId){
+		String device_id = Utils.getDeviceID(context);
+		if(null==device_id||device_id.length()<=0){
+//			device_id = UUIDGenrator.generateShortUuid();
+			device_id = Constants.DEVICEID;
+			Utils.setDeviceID(context, device_id);
+		}
+		addNewDevice(device_id,channelId);
+	}
+
+	private void addNewDevice(String device_id, String channelId) {
+		String url = Constants.HOST + "/Application/addDevice?deviceId="
+				+ device_id + "&channelId=" + channelId;
+		mAbHttpUtil.get(url, new AbStringHttpResponseListener() {
+			@Override
+			public void onSuccess(int statusCode, String content) {
+				Log.d(TAG, content);
+			}
+
+			@Override
+			public void onStart() {
+				Log.d(TAG, "onStart");
+			}
+
+			@Override
+			public void onFailure(int statusCode, String content,
+					Throwable error) {
+				Log.d(TAG, "onFailure");
+			}
+
+			@Override
+			public void onProgress(int bytesWritten, int totalSize) {
+			}
+
+			public void onFinish() {
+				Log.d(TAG, "onFinish");
+			};
+
+		});
 	}
 
 	/**
@@ -118,7 +169,8 @@ public class MyPushMessageReceiver extends PushMessageReceiver {
 					musicId = commandJson.getLong("musicId");
 					// 如果是下载音乐
 					if (command.equals("download")) {
-						updateCommand(context,command,content,Long.toString(musicId));
+						updateCommand(context, command, content,
+								Long.toString(musicId));
 					} else {
 						Intent intent = new Intent(context, MusicService.class);
 						intent.putExtra("command", command);
@@ -337,7 +389,8 @@ public class MyPushMessageReceiver extends PushMessageReceiver {
 	 * @param command
 	 */
 
-	private void updateCommand(Context context, String command,String content,String musicId) {
+	private void updateCommand(Context context, String command, String content,
+			String musicId) {
 		Utils.commandCache = command;
 		Utils.contentCache = content;
 		Utils.musicIdCache = musicId;

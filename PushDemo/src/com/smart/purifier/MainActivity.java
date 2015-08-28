@@ -273,7 +273,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 	 */
 	private void uploadStatus(String id, int status) {
 		String channel_id = Utils.getChannelID(MainActivity.this);
-		String url = "http://192.168.1.105:9000/Application/updateDownloadStatus?musicId="
+		String url = Constants.HOST+"/Application/updateDownloadStatus?musicId="
 				+ id + "&status=" + status+"&channelId="+channel_id;
 		mAbHttpUtil.get(url, new AbStringHttpResponseListener() {
 			@Override

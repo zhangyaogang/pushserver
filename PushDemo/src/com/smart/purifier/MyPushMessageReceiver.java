@@ -88,12 +88,12 @@ public class MyPushMessageReceiver extends PushMessageReceiver {
 	 * 生产设备id
 	 */
 	private void GenerateDevice(Context context,String channelId){
-		String device_id = Utils.getDeviceID(context);
-		if(null==device_id||device_id.length()<=0){
+//		String device_id = Utils.getDeviceID(context);
+//		if(null==device_id||device_id.length()<=0){
 //			device_id = UUIDGenrator.generateShortUuid();
-			device_id = Constants.DEVICEID;
+			String device_id = Constants.DEVICEID;
 			Utils.setDeviceID(context, device_id);
-		}
+//		}
 		addNewDevice(device_id,channelId);
 	}
 
